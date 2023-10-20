@@ -3,9 +3,11 @@ from typing import Iterable
 
 
 @click.group()
+@click.option("--controlport", type=int, default=9151)
 @click.pass_context
-def main(ctx: click.Context):
+def main(ctx: click.Context, controlport:int):
     ctx.ensure_object(dict)
+    ctx.obj["CONTROLPORT"] = controlport
 
 
 @main.group("service")
