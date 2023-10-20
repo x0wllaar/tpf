@@ -15,12 +15,6 @@ def service_cmd(ctx: click.Context, keyfile: str):
     ctx.ensure_object(dict)
 
 
-@service_cmd.command("generate")
-@click.pass_context
-def service_keygen_cmd(ctx: click.Context):
-    ctx.ensure_object(dict)
-
-
 @service_cmd.command("serve")
 @click.option('--detached/--no-detached', default=False)
 @click.option('--clientkeyfile', type=click.Path(exists=True))
