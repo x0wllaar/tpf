@@ -1,13 +1,16 @@
 import click
 from typing import Iterable
 
+from controller import connect_controller
+from service.service_serve import serve_command_impl
 
 @click.group()
 @click.option("--controlport", type=int, default=9151)
 @click.pass_context
-def main(ctx: click.Context, controlport:int):
+def main(ctx: click.Context, controlport: int):
     ctx.ensure_object(dict)
     ctx.obj["CONTROLPORT"] = controlport
+    ctx.obj["CONTROLLER"] = connect_controller(controlport)
 
 
 @main.group("service")
@@ -15,6 +18,7 @@ def main(ctx: click.Context, controlport:int):
 @click.pass_context
 def service_cmd(ctx: click.Context, keyfile: str):
     ctx.ensure_object(dict)
+    ctx.obj["SERVICEKEYFILE"] = keyfile
 
 
 @service_cmd.command("serve")
@@ -26,6 +30,10 @@ def service_cmd(ctx: click.Context, keyfile: str):
 def service_serve_cmd(ctx: click.Context, detached: bool, clientkeyfile: str,
                       clientkey: Iterable[str], fwd_spec: Iterable[str]):
     ctx.ensure_object(dict)
+    cnt = ctx.obj["CONTROLLER"]
+    keyfile = ctx.obj["SERVICEKEYFILE"]
+    serve_command_impl(detached, cnt=cnt, service_key_file=keyfile, client_key_file=clientkeyfile,
+                       client_keys=clientkey, fwd_specs=fwd_spec)
 
 
 @service_cmd.command("stop")
