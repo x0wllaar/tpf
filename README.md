@@ -1,6 +1,6 @@
 # tpf
 
-A 0-bullshit tool to forward ports over tor
+A 0-bullshit tool to forward ports using Tor
 
 ## Why?
 
