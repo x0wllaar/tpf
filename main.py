@@ -11,6 +11,7 @@ from client.client_key_generate import client_key_generate_command_impl
 from client.client_key_load import client_key_load_command_impl
 from client.client_key_list import client_key_list_command_impl
 from client.client_key_unload import client_key_unload_command_impl
+from client.client_key_print import client_key_print_command_impl
 
 
 @click.group()
@@ -104,12 +105,24 @@ def client_key_list_cmd(ctx: click.Context, printprivate: bool, service_ids: Ite
     cnt = connect_controller(ctx.obj["CONTROLPORT"])
     client_key_list_command_impl(cnt, service_ids, printprivate)
 
+
 @client_key_cmd.command("unload")
 @click.argument("service_ids", nargs=-1)
 @click.pass_context
 def client_key_unload_cmd(ctx: click.Context, service_ids: Iterable[str]):
     cnt = connect_controller(ctx.obj["CONTROLPORT"])
     client_key_unload_command_impl(cnt, service_ids)
+
+
+@client_key_cmd.command("print")
+@click.option("--human/--no-human", default=True)
+@click.option("--printprivate/--no-printprivate", default=False)
+@click.option("--printpublic/--no-printpublic", default=True)
+@click.pass_context
+def client_key_print_cmd(ctx: click.Context, human: bool, printprivate: bool, printpublic: bool):
+    keyfile = ctx.obj["CLIENTKEYFILE"]
+    client_key_print_command_impl(keyfile, human, printprivate, printpublic)
+
 
 if __name__ == "__main__":
     main(obj={})
