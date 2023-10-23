@@ -15,6 +15,7 @@ def _read_client_key_file(clientkeyfile) -> list[str]:
         lines = ckf.readlines()
     lines = [l.strip() for l in lines]
     lines = [l for l in lines if len(l) > 0]
+    lines = [l for l in lines if not l.startswith("#")]
     return lines
 
 def serve_command_impl(detached: bool, cnt: Controller, service_key_file: str, client_key_file: str, client_keys: Iterable[str], fwd_specs: Iterable[str]):
