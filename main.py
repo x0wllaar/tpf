@@ -39,7 +39,7 @@ def service_serve_cmd(ctx: click.Context, detached: bool, clientkeyfile: str,
 
 
 @service_cmd.command("stop")
-@click.option("--serviceid", multiple=True)
+@click.argument("serviceid", nargs=-1)
 @click.pass_context
 def service_stop_cmd(ctx: click.Context, serviceid: str):
     ctx.ensure_object(dict)
