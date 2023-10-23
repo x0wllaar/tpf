@@ -3,6 +3,7 @@ from typing import Iterable
 
 from controller import connect_controller
 from service.service_serve import serve_command_impl
+from service.service_stop import stop_command_impl
 
 @click.group()
 @click.option("--controlport", type=int, default=9151)
@@ -37,11 +38,13 @@ def service_serve_cmd(ctx: click.Context, detached: bool, clientkeyfile: str,
 
 
 @service_cmd.command("stop")
-@click.option("--serviceid")
+@click.option("--serviceid", multiple=True)
 @click.pass_context
 def service_stop_cmd(ctx: click.Context, serviceid: str):
     ctx.ensure_object(dict)
-    keyfile = ctx.obj["KEYFILE"]
+    keyfile = ctx.obj["SERVICEKEYFILE"]
+    cnt = ctx.obj["CONTROLLER"]
+    stop_command_impl(cnt, keyfile, serviceid)
 
 
 if __name__ == "__main__":
