@@ -16,9 +16,11 @@ Do you want to forward ports:
 * With secure authentication?
 * For any TCP-based protocol?
 
-If yes, then this simple tool may be for you.
+Were you looking for a simple tool that can do all that?
 
-## How?
+Now, [there is such a tool](https://en.wikipedia.org/wiki/There_is_such_a_party!).
+
+## How do I use `tpf`?
 
 To forward RDP with native Tor key-based authentication:
 
@@ -41,7 +43,8 @@ with client authentication enabled:
     Serving on ONION_ADDR
     ...
 
-On your client computer, load your client key into Tor:
+On your client computer, make sure Tor Browser is running
+and connected, and load your client key into Tor:
 
     tpf client key --keyfile key.ckey load ONION_ADDR
 
