@@ -2,9 +2,13 @@ import click
 from typing import Iterable
 
 from controller import connect_controller
+
 from service.service_serve import serve_command_impl
 from service.service_stop import stop_command_impl
 from service.service_list import list_command_impl
+
+from client.client_key_generate import client_key_generate_command_impl
+
 
 @click.group()
 @click.option("--controlport", type=int, default=9151)
@@ -53,6 +57,30 @@ def service_stop_cmd(ctx: click.Context, serviceid: str):
 def service_list_cmd(ctx: click.Context):
     cnt = ctx.obj["CONTROLLER"]
     list_command_impl(cnt)
+
+
+@main.group("client")
+@click.pass_context
+def client_cmd(ctx: click.Context):
+    pass
+
+
+@client_cmd.group("key")
+@click.option("--keyfile", type=click.Path(), required=False)
+@click.pass_context
+def client_key_cmd(ctx: click.Context, keyfile: str):
+    ctx.ensure_object(dict)
+    ctx.obj["CLIENTKEYFILE"] = keyfile
+
+
+@client_key_cmd.command("generate")
+@click.option("--force/--no-force", default=False)
+@click.option("--printprivate/--no-printprivate", default=False)
+@click.pass_context
+def client_key_generate_cmd(ctx: click.Context, force: bool, printprivate: bool):
+    ctx.ensure_object(dict)
+    keyfile = ctx.obj["CLIENTKEYFILE"]
+    client_key_generate_command_impl(keyfile, force, printprivate)
 
 
 if __name__ == "__main__":
