@@ -6,6 +6,9 @@ import os
 
 
 def client_key_load_command_impl(cnt: Controller, keyfile: str, private_key: str, services: Iterable[str]):
+    services = list(services)
+    services = [sid.removesuffix(".onion") for sid in services]
+
     pkey = None
     if keyfile is not None and os.path.isfile(keyfile):
         client_key = ClientKeyFile.from_file(keyfile)
