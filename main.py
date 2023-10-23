@@ -4,6 +4,7 @@ from typing import Iterable
 from controller import connect_controller
 from service.service_serve import serve_command_impl
 from service.service_stop import stop_command_impl
+from service.service_list import list_command_impl
 
 @click.group()
 @click.option("--controlport", type=int, default=9151)
@@ -45,6 +46,13 @@ def service_stop_cmd(ctx: click.Context, serviceid: str):
     keyfile = ctx.obj["SERVICEKEYFILE"]
     cnt = ctx.obj["CONTROLLER"]
     stop_command_impl(cnt, keyfile, serviceid)
+
+
+@service_cmd.command("list")
+@click.pass_context
+def service_list_cmd(ctx: click.Context):
+    cnt = ctx.obj["CONTROLLER"]
+    list_command_impl(cnt)
 
 
 if __name__ == "__main__":
