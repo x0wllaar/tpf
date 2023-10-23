@@ -9,6 +9,7 @@ from service.service_list import list_command_impl
 
 from client.client_key_generate import client_key_generate_command_impl
 from client.client_key_load import client_key_load_command_impl
+from client.client_key_list import client_key_list_command_impl
 
 
 @click.group()
@@ -85,13 +86,22 @@ def client_key_generate_cmd(ctx: click.Context, force: bool, printprivate: bool)
 
 
 @client_key_cmd.command("load")
-@click.option("--privatekey", multiple=True)
+@click.option("--privatekey")
 @click.argument("service_ids", nargs=-1)
 @click.pass_context
-def client_key_load_cmd(ctx: click.Context, privatekey: Iterable[str], service_ids: Iterable[str]):
+def client_key_load_cmd(ctx: click.Context, privatekey: str, service_ids: Iterable[str]):
     cnt = connect_controller(ctx.obj["CONTROLPORT"])
     keyfile = ctx.obj["CLIENTKEYFILE"]
     client_key_load_command_impl(cnt, keyfile, privatekey, service_ids)
+
+
+@client_key_cmd.command("list")
+@click.option("--printprivate/--no-printprivate", default=False)
+@click.argument("service_ids", nargs=-1)
+@click.pass_context
+def client_key_list_cmd(ctx: click.Context, printprivate: bool, service_ids: Iterable[str]):
+    cnt = connect_controller(ctx.obj["CONTROLPORT"])
+    client_key_list_command_impl(cnt, service_ids, printprivate)
 
 
 if __name__ == "__main__":
