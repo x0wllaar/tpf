@@ -1,5 +1,6 @@
 stem @ git+https://github.com/torproject/stem@0091f416dd4d62bb89d0bd95e18bde229f846f41
 PyNaCl==1.5.0
 click==8.1.7
+PySocks==1.7.1
 
 pyinstaller==6.1.0
