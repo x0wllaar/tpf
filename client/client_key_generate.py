@@ -1,5 +1,5 @@
 from .client_key_file import ClientKeyFile
-from .utils import key_str
+from .utils import key_str, key_str_64
 import nacl.public
 import os
 
@@ -8,7 +8,7 @@ def _generate_raw_keys() -> ClientKeyFile:
     priv_key = nacl.public.PrivateKey.generate()
     pub_key = priv_key.public_key
     return ClientKeyFile(
-        private_key=key_str(priv_key),
+        private_key=key_str_64(priv_key),
         public_key=key_str(pub_key)
     )
 

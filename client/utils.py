@@ -19,3 +19,14 @@ def str_key(kstr: str):
     key_bytes = base64.b32decode(key_b32.encode('utf-8'))
     key = nacl.public.PrivateKey(private_key=key_bytes)
     return key
+
+def key_str_64(key):
+    key_bytes = bytes(key)
+    key_b64 = base64.b64encode(key_bytes)
+    s = key_b64.decode('utf-8')
+    return s
+
+def str_64_key(key_b64):
+    key_bytes = base64.b64decode(key_b64.encode('utf-8'))
+    key = nacl.public.PrivateKey(private_key=key_bytes)
+    return key
