@@ -20,9 +20,9 @@ def client_key_load_command_impl(cnt: Controller, keyfile: str, private_key: str
         print(f"{srv} ->", end=" ")
         try:
             cnt.add_hidden_service_auth(srv, pkey, write=False)
+            print(f"Added key")
         except ProtocolError as pe:
             if str(pe).endswith("Client for onion existed and replaced"):
-                pass
+                print("Replaced key")
             else:
                 raise pe
-        print(f"Added key")
