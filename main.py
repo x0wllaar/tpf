@@ -13,6 +13,7 @@ from client.client_key_list import client_key_list_command_impl
 from client.client_key_unload import client_key_unload_command_impl
 from client.client_key_print import client_key_print_command_impl
 
+from forwarder.forward_command_impl import forward_command_impl
 
 @click.group()
 @click.option("--controlport", type=int, default=9151)
@@ -123,6 +124,15 @@ def client_key_print_cmd(ctx: click.Context, human: bool, printprivate: bool, pr
     keyfile = ctx.obj["CLIENTKEYFILE"]
     client_key_print_command_impl(keyfile, human, printprivate, printpublic)
 
+
+@main.command("forward")
+@click.option("--fromaddr", default="localhost:8000")
+@click.option("--toaddr", required=True)
+@click.option("--proxyaddr", default="127.0.0.1:9150")
+@click.option("--proxy/--no-proxy", default=True)
+@click.pass_context
+def forward_cmd(ctx: click.Context, fromaddr: str, toaddr: str, proxyaddr: str, proxy: bool):
+    forward_command_impl(fromaddr, toaddr, proxy, proxyaddr)
 
 if __name__ == "__main__":
     main(obj={})
