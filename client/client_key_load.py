@@ -1,17 +1,28 @@
 from .client_key_file import ClientKeyFile
-from stem.control import  Controller
+from stem.control import Controller
+from stem import ProtocolError
 from typing import Iterable
 import os
 
 
-def client_key_load_command_impl(cnt: Controller, keyfile: str, private_keys: Iterable[str], services: Iterable[str]):
-    pkeys = list(private_keys)
+def client_key_load_command_impl(cnt: Controller, keyfile: str, private_key: str, services: Iterable[str]):
+    pkey = None
     if keyfile is not None and os.path.isfile(keyfile):
         client_key = ClientKeyFile.from_file(keyfile)
-        pkeys.append(client_key.private_key)
+        pkey = client_key.private_key
+    if private_key is not None:
+        pkey = private_key
+
+    if pkey is None:
+        raise ValueError("Private key not specified")
 
     for srv in services:
         print(f"{srv} ->", end=" ")
-        for pk in pkeys:
-            cnt.add_hidden_service_auth(srv, pk, write=False)
-        print(f"Added {len(pkeys)} key{'s' if len(pkeys) > 1 else ''}")
+        try:
+            cnt.add_hidden_service_auth(srv, pkey, write=False)
+        except ProtocolError as pe:
+            if str(pe).endswith("Client for onion existed and replaced"):
+                pass
+            else:
+                raise pe
+        print(f"Added key")
