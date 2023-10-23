@@ -1,7 +1,7 @@
 import click
 from typing import Iterable
 
-from controller import connect_controller
+from controller.controller import connect_controller
 
 from service.service_serve import serve_command_impl
 from service.service_stop import stop_command_impl
