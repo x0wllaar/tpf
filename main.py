@@ -10,7 +10,6 @@ from service.service_serve import serve_command_impl
 def main(ctx: click.Context, controlport: int):
     ctx.ensure_object(dict)
     ctx.obj["CONTROLPORT"] = controlport
-    ctx.obj["CONTROLLER"] = connect_controller(controlport)
 
 
 @main.group("service")
@@ -19,6 +18,7 @@ def main(ctx: click.Context, controlport: int):
 def service_cmd(ctx: click.Context, keyfile: str):
     ctx.ensure_object(dict)
     ctx.obj["SERVICEKEYFILE"] = keyfile
+    ctx.obj["CONTROLLER"] = connect_controller(ctx.obj["CONTROLPORT"])
 
 
 @service_cmd.command("serve")
