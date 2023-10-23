@@ -29,14 +29,14 @@ Generate your client keypair on your client machine:
     tpf client key --keyfile key.ckey generate
     Public key: PUBLIC_KEY_BASE32
 
-Copy this public key to your server computer 
+Copy this public key to your server machine 
 (hint: you can use [Onionshare](https://onionshare.org) 
 for that).
 
-Run Tor Browser on your client machine. 
+Run Tor Browser on your client. 
 Make sure it connects and is connected to the Tor network.
 
-Start the onion service on your server computer,
+Start the onion service on your server,
 with client authentication enabled:
 
     tpf service --keyfile service.skey serve --detached --clientkey PUBLIC_KEY_BASE32 3389
@@ -48,14 +48,14 @@ and connected, and load your client key into Tor:
 
     tpf client key --keyfile key.ckey load ONION_ADDR
 
-On your client computer, use [socat](https://sourceforge.net/projects/unix-utils/files/socat/1.7.3.2/)
+On your client computer, use the `forward` command of `tpf`
 to forward ports via Tor (this is not needed for simple HTTP sharing):
 
-    socat -dd -ls tcp-listen:33389,fork socks4a:127.0.0.1:ONION_ADDR:3389,socksport=9150,socksuser=rdp1
+    tpf forward --fromaddr 33389 --toaddr ONION_ADDR:3389
+    Forwarding localhost:33391 -> 127.0.0.1:9150 -> ONION_ADDR:3389
 
-Connect to 127.0.0.1:33389 with your RDP client of choice.
+Connect to localhost:33389 with your RDP client of choice.
 
-To stop the forwarding, on the server computer run:
+To stop the forwarding, on the server run:
 
     tpf service --keyfile service.skey stop
-
